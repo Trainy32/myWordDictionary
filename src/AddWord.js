@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
+
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
-import { createWord } from './redux/modules/words'
+import { createWordFB } from './redux/modules/words'
 
 
 const AddWord = (props) => {
@@ -22,7 +23,7 @@ const AddWord = (props) => {
       window.alert('단어 설명은 필수로 입력해주세요!')
     }
     else {
-      dispatch(createWord({
+      dispatch(createWordFB({
         word_name: new_word_name.current.value,
         word_type: new_word_type.current.value,
         description: new_description.current.value,
@@ -35,7 +36,7 @@ const AddWord = (props) => {
 
   const addTest = () => {
     for (let i = 0; i < 5; i++) {
-      dispatch(createWord(
+      dispatch(createWordFB(
         { word_name: new_word_name.current.value + (i+1) + '번',
           word_type: new_word_type.current.value,
           description: new_description.current.value,

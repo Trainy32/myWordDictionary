@@ -2,20 +2,22 @@ import React from "react";
 
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { deleteWord, highlightWord } from './redux/modules/words'
+import { loadWordFB, deleteWordFB, highlightWordFB } from './redux/modules/words'
 
 const WordList = (props) => {
   const myWords = useSelector((state)=>state.words.list)
   const dispatch = useDispatch()
 
-
+  React.useEffect( () => {
+    dispatch (loadWordFB());
+      }, []); 
 
   return (
     <WordWrap>
       {myWords.map((word, i) => 
       <Wordcard key={i}>
-        <button onClick={()=>{ dispatch(deleteWord(i)) }} >X</button>
-        <button onClick={()=>{ dispatch(highlightWord(i))}}>
+        <button onClick={()=>{ dispatch(deleteWordFB(word.id)); }} >X</button>
+        <button onClick={()=>{ dispatch(highlightWordFB(word.id))}}>
           {myWords[i].highlight ? '★' : '☆'}</button>
 
         <h2> {word.word_name} </h2>
