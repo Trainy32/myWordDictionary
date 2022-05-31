@@ -1,8 +1,50 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+
+import { createWord } from './redux/modules/words'
+
 
 const AddWord = (props) => {
   const history = useHistory()
+  const dispatch = useDispatch()
+  // const current_word = useSelector((state) => state.words.list)
+
+  const new_word_name = useRef('')
+  const new_word_type = useRef('')
+  const new_description = useRef('')
+  const new_examples = useRef('')
+
+  const addBtn = () => {
+    if (new_word_name.current.value === '') {
+      window.alert('단어명은 필수로 입력해주세요!')
+    } else if (new_description.current.value === '') {
+      window.alert('단어 설명은 필수로 입력해주세요!')
+    }
+    else {
+      dispatch(createWord({
+        word_name: new_word_name.current.value,
+        word_type: new_word_type.current.value,
+        description: new_description.current.value,
+        examples: new_examples.current.value,
+        highlight: false,
+      } ))
+      history.push('/')
+    }
+  }
+
+  const addTest = () => {
+    for (let i = 0; i < 5; i++) {
+      dispatch(createWord(
+        { word_name: new_word_name.current.value + (i+1) + '번',
+          word_type: new_word_type.current.value,
+          description: new_description.current.value,
+          examples: new_examples.current.value,
+          highlight: false 
+        } ))
+    }
+  }
+
 
   return (
     <div>
@@ -10,19 +52,24 @@ const AddWord = (props) => {
       <p></p>
       <button onClick={() => { history.push('/') }}> 임시버튼 : 돌아가기 </button>
       <div>
-        <label htmlFor="myWord">단어</label>
-        <input type={'text'} id={'myWord'} placeholder="나만의 단어를 적어주세요" />
+        <label htmlFor="myWord">*단어</label>
+        <input type={'text'} id={'myWord'} ref={new_word_name} placeholder="나만의 단어를 적어주세요" />
       </div>
       <div>
-        <label htmlFor="description">설명</label>
-        <input type={'text'} id={'description'} placeholder="단어에 대해 설명해주세요" />
+        <label htmlFor="description">유형</label>
+        <input type={'text'} id={'description'} ref={new_word_type} placeholder="타입이 뭔가요? ex.형용사" />
+      </div>
+      <div>
+        <label htmlFor="description">*설명</label>
+        <input type={'text'} id={'description'} ref={new_description} placeholder="단어에 대해 설명해주세요" />
       </div>
       <div>
         <label htmlFor="examples">예시</label>
-        <input type={'text'} id={'examples'} placeholder="어떻게 쓰는 단어인가요?" />
+        <input type={'text'} id={'examples'} ref={new_examples} placeholder="어떻게 쓰는 단어인가요?" />
       </div>
 
-      <button>추가하기</button>
+      <button onClick={() => { addBtn() }}>추가하기</button>
+      <button onClick={() => { addTest() }}>테스트케이스 추가 *누르지 마세요</button>
     </div>
   )
 

@@ -10,15 +10,29 @@ function App() {
   const history = useHistory()
 
   return (
-    <div className="App">
+    <Wrap className="App">
       <h1> 나만의 단어 사전</h1>
       <Route path='/' exact>
         <button onClick={()=>{history.push('/add_word')}}> 추가하기 </button>
         <WordList/>
       </Route>
         <Route path='/add_word' exact component={AddWord}/>
-    </div>
+    </Wrap>
   );
 }
+
+const Wrap = styled.div`
+display:flex;
+flex-direction:column;
+
+h1 {
+  text-align:center;
+}
+
+button {
+  width: 80%;
+  margin: auto;
+}
+`
 
 export default App;
