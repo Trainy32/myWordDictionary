@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
+import styled from 'styled-components'
 
 import { createWordFB } from './redux/modules/words'
 
@@ -48,34 +49,122 @@ const AddWord = (props) => {
 
 
   return (
-    <div>
-      단어 추가하기
-      <p></p>
-      <button onClick={() => { history.push('/') }}> 임시버튼 : 돌아가기 </button>
-      <div>
-        <label htmlFor="myWord">*단어</label>
-        <input type={'text'} id={'myWord'} ref={new_word_name} placeholder="나만의 단어를 적어주세요" />
-      </div>
-      <div>
-        <label htmlFor="description">유형</label>
-        <input type={'text'} id={'description'} ref={new_word_type} placeholder="타입이 뭔가요? ex.형용사" />
-      </div>
-      <div>
-        <label htmlFor="description">*설명</label>
-        <input type={'text'} id={'description'} ref={new_description} placeholder="단어에 대해 설명해주세요" />
-      </div>
-      <div>
-        <label htmlFor="examples">예시</label>
-        <input type={'text'} id={'examples'} ref={new_examples} placeholder="어떻게 쓰는 단어인가요?" />
-      </div>
+    <Wrap>
+      <h3>새로운 단어 추가하기</h3>
 
-      <button onClick={() => { addBtn() }}>추가하기</button>
-      <button onClick={() => { addTest() }}>테스트케이스 추가 *누르지 마세요</button>
-    </div>
+      <WordInputs>
+        <label htmlFor="myWord">*단어 :</label>
+        <input type={'text'} id={'myWord'} ref={new_word_name} placeholder="나만의 단어를 적어주세요" />
+      </WordInputs>
+      <WordInputs>
+        <label htmlFor="description"> 유형 : </label>
+        <input type={'text'} id={'description'} ref={new_word_type} placeholder="타입이 뭔가요?  (ex.형용사)" />
+      </WordInputs>
+      <WordInputs>
+        <label htmlFor="description">*설명 :</label>
+        <input type={'text'} id={'description'} ref={new_description} placeholder="단어에 대해 설명해주세요" />
+      </WordInputs>
+      <WordInputs>
+        <label htmlFor="examples"> 예시 : </label>
+        <input type={'text'} id={'examples'} ref={new_examples} placeholder="어떻게 쓰는 단어인가요?" />
+      </WordInputs>
+
+      <button id="addbtn" onClick={() => { addBtn() }}>추가하기</button>
+      <button onClick={() => { history.push('/') }}> 리스트로 </button>
+      <button id="testing" onClick={() => { addTest() }}>테스트케이스 추가 *누르지 마세요</button>
+    </Wrap>
   )
 
 }
 
+const Wrap = styled.div `
+  margin: 120px auto;
+  width: 50%;
+  min-width: 350px;
+
+  display: flex;
+  flex-direction : column;
+  align-items: center;
+
+  h3 {
+    margin: 0px 0px 40px 0px;
+    text-align: center;
+    color: #133275;
+    font-size: 1.4em;
+    font-weight: 900;
+  }
+
+  button {
+    width: 75%;
+    max-width: 400px;
+    height: 50px;
+    margin-top: 20px;  
+    border: 1px solid #ddd;
+    border-radius:50px;
+    box-shadow: 1px 1px 3px #0000002e;
+    color: #777; 
+    font-size: 16px;
+    font-weight:800;
+  
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      background-color: #5096f3;
+      color: #133275;
+    }
+  }
+
+  #addbtn {
+    background-color: #133275 ;
+    color: #e2ebff;
+
+    &:hover {
+      background-color: #5096f3;
+      color: #133275;
+    }
+  }
+
+  #testing {
+    background:#fff;
+    border:none;
+    margin-top: 50px;  
+    height: 20px;
+    box-shadow: none;
+    color: #ccc;
+    width: auto;
+    font-size: 14px;
+    font-weight:500;
+    
+    &:hover {
+      color: #999;
+    }
+  }
+
+`
+
+const WordInputs = styled.div `
+margin : 0px auto 20px auto;
+width: 100%;
+display:flex;
+justify-content: center;
+
+label {
+  color: #133275;
+
+}
+
+input {
+  width: 50%;
+  max-width: 300px;
+  height: 30px;
+  margin-left: 20px;
+  border: 1px solid #ddd;
+  border-radius:50px;
+  padding: 10px 20px;
+  box-shadow: 1px 1px 3px #0000002e;
+}
+
+`
 
 
 export default AddWord

@@ -10,7 +10,7 @@ const WordList = (props) => {
 
   React.useEffect( () => {
     dispatch (loadWordFB());
-      }); 
+      }, []); 
 
   return (
     <WordWrap>
