@@ -1,16 +1,18 @@
 import React, { useRef } from "react";
 
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
+import { useHistory, useParams, Route, Switch } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import { createWordFB } from './redux/modules/words'
+import { createWordFB, updateWordFB } from './redux/modules/words'
 
-
-const AddWord = (props) => {
+ 
+const EditWord = (props) => {
   const history = useHistory()
   const dispatch = useDispatch()
-  // const current_word = useSelector((state) => state.words.list)
+  const params = useParams()
+  const current_word = useSelector((state)=>state.words.list).find((e) => e.id === params.word_id)
+  // const checker = params.word_id === 'add_new' || current_word ? true : false
 
   const new_word_name = useRef('')
   const new_word_type = useRef('')
@@ -35,6 +37,28 @@ const AddWord = (props) => {
     }
   }
 
+  const editBtn = () => {
+    if (!current_word) {
+      window.alert('존재하지 않는 단어입니다. 접근 경로를 확인해주세요')    
+    }
+    else if (new_word_name.current.value === '') {
+      window.alert('단어명은 필수로 입력해주세요!')
+    } else if (new_description.current.value === '') {
+      window.alert('단어 설명은 필수로 입력해주세요!')
+    }
+    else {
+      dispatch(updateWordFB({
+        id: current_word.id,
+        word_name: new_word_name.current.value,
+        word_type: new_word_type.current.value,
+        description: new_description.current.value,
+        examples: new_examples.current.value,
+      } ))
+
+      history.push('/')
+    }
+  }
+
   const addTest = () => {
     for (let i = 0; i < 10; i++) {
       dispatch(createWordFB(
@@ -45,33 +69,53 @@ const AddWord = (props) => {
           highlight: false 
         } ))
     }
-  }
-
+  }  
 
   return (
     <Wrap>
-      <h3>새로운 단어 추가하기</h3>
+      
+      <Switch>
+        <Route path='/edit_word/add_new' exact>
+          <h3>새로운 단어 추가하기</h3>
+        </Route>
+        <Route>
+          <h3>단어를 수정하시겠어요?</h3>
+        </Route>
+      </Switch>
 
       <WordInputs>
         <label htmlFor="myWord">*단어 :</label>
-        <input type={'text'} id={'myWord'} ref={new_word_name} placeholder="나만의 단어를 적어주세요" />
+        <input type={'text'} id={'myWord'} ref={new_word_name} 
+         defaultValue={current_word ? current_word.word_name : ''} placeholder="나만의 단어를 적어주세요" />
       </WordInputs>
       <WordInputs>
         <label htmlFor="description"> 유형 : </label>
-        <input type={'text'} id={'description'} ref={new_word_type} placeholder="타입이 뭔가요?  (ex.형용사)" />
+        <input type={'text'} id={'description'} ref={new_word_type} 
+         defaultValue={current_word ? current_word.word_type : ''} placeholder="타입이 뭔가요?  (ex.형용사)" />
       </WordInputs>
       <WordInputs>
         <label htmlFor="description">*설명 :</label>
-        <input type={'text'} id={'description'} ref={new_description} placeholder="단어에 대해 설명해주세요" />
+        <input type={'text'} id={'description'} ref={new_description} 
+         defaultValue={current_word ?current_word.description : ''} placeholder="단어에 대해 설명해주세요" />
       </WordInputs>
       <WordInputs>
         <label htmlFor="examples"> 예시 : </label>
-        <input type={'text'} id={'examples'} ref={new_examples} placeholder="어떻게 쓰는 단어인가요?" />
+        <input type={'text'} id={'examples'} ref={new_examples} 
+         defaultValue={current_word ? current_word.examples : ''}placeholder="어떻게 쓰는 단어인가요?" />
       </WordInputs>
 
-      <button id="addbtn" onClick={() => { addBtn() }}>추가하기</button>
-      <button onClick={() => { history.push('/') }}> 리스트로 </button>
-      <button id="testing" onClick={() => { addTest() }}>테스트케이스 추가 *누르지 마세요</button>
+      <Switch>
+        <Route path='/edit_word/add_new' exact>
+          <button onClick={() => { addBtn() }}>추가하기</button>
+        </Route>
+
+        <Route>
+          <button onClick={() => { editBtn() }}>수정하기</button>
+        </Route>
+      </Switch>
+
+        <button id="listBtn" onClick={() => { history.push('/') }}> 리스트로 </button>
+        <button id="testing" onClick={() => { addTest() }}>테스트케이스 추가 *누르지 마세요</button>
     </Wrap>
   )
 
@@ -102,10 +146,10 @@ const Wrap = styled.div `
     border: 1px solid #ddd;
     border-radius:50px;
     box-shadow: 1px 1px 3px #0000002e;
-    color: #777; 
     font-size: 16px;
     font-weight:800;
-  
+    background-color: #133275 ;
+    color: #e2ebff;
     transition: all 0.2s ease-in;
 
     &:hover {
@@ -114,10 +158,9 @@ const Wrap = styled.div `
     }
   }
 
-  #addbtn {
-    background-color: #133275 ;
-    color: #e2ebff;
-
+  #listBtn {
+    color: #777; 
+    background-color: #ddd;
     &:hover {
       background-color: #5096f3;
       color: #133275;
@@ -167,4 +210,4 @@ input {
 `
 
 
-export default AddWord
+export default EditWord

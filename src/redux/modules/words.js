@@ -90,6 +90,14 @@ export const highlightWordFB = (word_id) => {
 }
 
 
+export const updateWordFB = (word_data) => {
+  return async function (dispatch, getState) {
+      const docRef = doc(db, 'myWordDict', word_data.id)
+      await updateDoc(docRef, {...word_data});
+
+      dispatch(updateWord(word_data))
+  }
+}
 
 // 초기값
 const initialState = {
@@ -125,6 +133,13 @@ export default function reducer(state = initialState, action = {}) {
         parseInt(action.word_idx) === i ? { ...e, highlight: !e.highlight } : e);
       return { list: new_word_list }
     }
+
+    case 'words/UPDATE': {
+      const new_word_list = state.list.map((e, i) =>
+        parseInt(action.word_data.id) === e.id ? { ...action.word_data } : e);
+      return { list: new_word_list }
+    }
+
 
     default:
       return state;

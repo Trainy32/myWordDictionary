@@ -3,10 +3,12 @@ import React from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { loadWordFB, deleteWordFB, highlightWordFB } from './redux/modules/words'
+import { useHistory } from 'react-router-dom';
 
 const WordList = (props) => {
   const myWords = useSelector((state)=>state.words.list)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   React.useEffect( () => {
     dispatch (loadWordFB());
@@ -20,7 +22,8 @@ const WordList = (props) => {
         <CardTitle>
           <h2> {word.word_name} </h2>
             <CardBtn>
-            <button onClick={()=>{ dispatch(highlightWordFB(word.id))}} style={{margin:'0px 0px 7px 0px'}}>
+              <Correction onClick={()=>{history.push('/edit_word/'+word.id)}}>수정</Correction>
+            <button onClick={()=>{ dispatch(highlightWordFB(word.id))}} style={{margin:'0px 0px 10px 0px'}}>
               {myWords[i].highlight ? '★' : '☆'}</button>
             <button onClick={()=>{ dispatch(deleteWordFB(word.id))}}>X</button>
             </CardBtn>
@@ -103,6 +106,17 @@ const CardBtn = styled.div `
     padding: 0px 3px;
   }
   `
+const Correction= styled.span `
+  color: #99aacd;
+  margin-bottom: 3px;
+  margin-right: 10px;
+  font-weight: 300;
+  font-size: 14px;
+  &:hover {
+    font-weight: 900;
+  }
+`
+
 
 const WordType = styled.span`
     color: #99aacd;
