@@ -12,7 +12,10 @@ const EditWord = (props) => {
   const dispatch = useDispatch()
   const params = useParams()
   const current_word = useSelector((state)=>state.words.list).find((e) => e.id === params.word_id)
-  // const checker = params.word_id === 'add_new' || current_word ? true : false
+  const checker = params.word_id === 'add_new' || !current_word ? params.word_id : current_word.id
+
+  const titleMessage = params.word_id === 'add_new' ? '나 만의 단어를 입력해주세요' : current_word ? '단어를 수정하시겠어요?' : '잘못된 접근입니다!'
+
 
   const new_word_name = useRef('')
   const new_word_type = useRef('')
@@ -39,7 +42,8 @@ const EditWord = (props) => {
 
   const editBtn = () => {
     if (!current_word) {
-      window.alert('존재하지 않는 단어입니다. 접근 경로를 확인해주세요')    
+      window.alert('존재하지 않는 단어입니다. 접근 경로를 확인해주세요')   
+      history.push('/') 
     }
     else if (new_word_name.current.value === '') {
       window.alert('단어명은 필수로 입력해주세요!')
@@ -60,7 +64,7 @@ const EditWord = (props) => {
   }
 
   const addTest = () => {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
       dispatch(createWordFB(
         { word_name: new_word_name.current.value +'테스트 '+(i+1)+'번',
           word_type: new_word_type.current.value +'명사',
@@ -73,16 +77,8 @@ const EditWord = (props) => {
 
   return (
     <Wrap>
-      
-      <Switch>
-        <Route path='/edit_word/add_new' exact>
-          <h3>새로운 단어 추가하기</h3>
-        </Route>
-        <Route>
-          <h3>단어를 수정하시겠어요?</h3>
-        </Route>
-      </Switch>
-
+        <h3>{titleMessage}</h3>
+        
       <WordInputs>
         <label htmlFor="myWord">*단어 :</label>
         <input type={'text'} id={'myWord'} ref={new_word_name} 
