@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { createWordFB } from './redux/modules/words'
 
@@ -13,8 +13,8 @@ const AddWord = (props) => {
 
   const new_word_name = useRef('')
   const new_word_type = useRef('')
-  const new_description = useRef('')
-  const new_examples = useRef('')
+  const new_description = useRef('-')
+  const new_examples = useRef('-')
 
   const addBtn = () => {
     if (new_word_name.current.value === '') {
@@ -35,12 +35,12 @@ const AddWord = (props) => {
   }
 
   const addTest = () => {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       dispatch(createWordFB(
-        { word_name: new_word_name.current.value + (i+1) + '번',
-          word_type: new_word_type.current.value,
-          description: new_description.current.value,
-          examples: new_examples.current.value,
+        { word_name: new_word_name.current.value +'테스트 '+(i+1)+'번',
+          word_type: new_word_type.current.value +'명사',
+          description: new_description.current.value +'단어를 설명해요',
+          examples: new_examples.current.value+'이런 예시는 어떨까',
           highlight: false 
         } ))
     }
